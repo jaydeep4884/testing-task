@@ -1,63 +1,87 @@
 import "./App.css";
 import backgroundImg from "./assets/background.png";
 import brand from "./assets/brand.png";
+import { Field, Form, Formik } from "formik";
+import { Link } from "react-router";
 
 export default function App() {
+  // Initial form values
+  const ini = { Email: "", FullName: "", Password: "" };
+
+  // Form submission handler
+  const handleFormData = (values, { resetForm }) => {
+    console.log(values); // Check Form Data in Console
+    alert("Form Submitted Successfully !!");
+    resetForm();
+  };
+
+  // Form fields configuration
   const fields = [
-    { label: "Email", type: "email" },
-    { label: "Full Name", type: "text" },
-    { label: "Password", type: "password" },
+    { label: "Email", type: "email", name: "Email" },
+    { label: "Full Name", type: "text", name: "FullName" },
+    { label: "Password", type: "password", name: "Password" },
   ];
 
   return (
     <div
-      className="min-h-screen bg-cover bg-center flex justify-center items-center"
-      style={{ backgroundImage: `url(${backgroundImg})` }}
+      className="min-h-screen bg-cover bg-center flex justify-center items-center p-4 sm:p-6"
+      style={{ backgroundImage: `url(${backgroundImg})` }} // Background image
     >
-      <div className="w-full max-w-3xl bg-white rounded-3xl overflow-hidden flex flex-col md:flex-row shadow-lg">
-        {/* Left */}
-        <div className="bg-[#084b3e] text-[#f9e2ba] px-8 py-4 flex flex-col justify-between items-start md:w-[40%]">
+      <div className="w-full max-w-5xl bg-white rounded-3xl overflow-hidden flex flex-col md:flex-row shadow-lg">
+        {/* Left Section - Heading */}
+        <div className="bg-[#084b3e] text-[#f9e2ba] px-6 py-3 sm:px-8 sm:py-4 flex flex-col justify-between items-start gap-2 md:w-[35%]">
           <img src={brand} alt="logo" className="h-[65px] object-contain" />
-          <h1 className="text-2xl font-semibold leading-snug">
+          <h1 className="lg:text-3xl md:text-2xl text-[22px] font-medium sm:font-semibold leading-snug">
             Say hello to global food and beverage producers and suppliers, all
             in one place
           </h1>
         </div>
 
-        {/* Right */}
-        <div className="p-7 md:w-[55%] flex flex-col gap-16 justify-center">
-          <h2 className="text-2xl font-semibold">
+        {/* Right Section - Signup Form */}
+        <div className="px-6 py-4 sm:py-7 sm:px-10 md:w-[60%] flex flex-col gap-8 sm:gap-16 justify-center">
+          <h2 className="text-2xl sm:text-[28px] lg:text-[34px] text-[#232323] font-semibold">
             Let’s get started <br /> with a few simple steps
           </h2>
 
-          <form className="flex flex-col gap-5">
-            {fields.map(({ label, type }) => (
-              <div key={label} >
-                <label className="block text-xs font-medium">{label}</label>
-                <input
-                  type={type}
-                  className="block w-full border-b border-gray-800 outline-none text-sm"
-                />
-              </div>
-            ))}
-            <button className="w-full bg-[#00c38b] hover:bg-[#00a877] text-white py-3 rounded-xl font-semibold transition-colors mt-3">
-              Sign up
-            </button>
-          </form>
+          {/* Signup Form */}
+          <Formik onSubmit={handleFormData} initialValues={ini}>
+            <Form className="flex flex-col gap-6 sm:gap-9">
+              {fields.map(({ label, type, name }) => (
+                <div key={name}>
+                  <label className="block text-base font-semibold">
+                    {label}
+                  </label>
+                  <Field
+                    type={type}
+                    name={name}
+                    className="block w-full border-b border-gray-800 outline-none focus:border-[#00c38b] text-sm"
+                    required
+                  />
+                </div>
+              ))}
+              <button
+                type="submit"
+                className="w-full bg-[#00c38b] hover:bg-[#00a877] text-white py-3 sm:py-4 rounded-xl font-semibold transition-colors mt-3"
+              >
+                Sign up
+              </button>
+            </Form>
+          </Formik>
 
-          <div className="text-xs text-[#bdbdbd] font-medium tracking-tight font-sans ">
+          {/* Footer Links */}
+          <div className="text-sm text-[#bdbdbd] font-medium tracking-tight font-sans space-y-1">
             <p>
               By signing up, you agree to our{" "}
-              <a href="/" className="underline">
+              <Link to="/terms" className="underline">
                 Terms of Service
-              </a>
+              </Link>
               .
             </p>
             <p>
               Already have an account?{" "}
-              <a href="/" className="text-green-600 underline">
+              <Link to="/login" className="text-[#00c38b] underline">
                 Log in
-              </a>
+              </Link>
             </p>
           </div>
         </div>
